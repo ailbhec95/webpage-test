@@ -128,7 +128,6 @@ function logout() {
     
     // Clear session
     localStorage.removeItem('userSession');
-    updateUserInterface();
     
     console.log('User logged out');
     alert('You have been logged out successfully!');
@@ -369,7 +368,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (login(name, userId, password)) {
                 closeLoginModal();
-                updateUserInterface();
                 this.reset();
                 alert(`Welcome, ${name}! You are now logged in.`);
             }
