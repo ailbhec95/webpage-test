@@ -1,20 +1,4 @@
-import { Experiment } from '@amplitude/experiment-js-client';
 
-// (1) Initialize the experiment client with Amplitude Analytics.
-const experiment = Experiment.initializeWithAmplitudeAnalytics(
-    'DEPLOYMENT_KEY'
-);
-
-// (2) Fetch variants and await the promise result.
-await experiment.fetch();
-
-// (3) Lookup a flag's variant.
-const variant = experiment.variant('FLAG_KEY');
-if (variant.value === 'on') {
-    // Flag is on
-} else {
-    // Flag is off
-}
 // Property data for modal details
 const propertyData = {
     1: {
