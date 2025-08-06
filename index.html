@@ -16,20 +16,22 @@
             try {
                 console.log('Initializing Amplitude...');
                 
+                // Add session replay plugin first
+                if (window.sessionReplay && window.sessionReplay.plugin) {
+                    console.log('Adding session replay plugin...');
+                    window.amplitude.add(window.sessionReplay.plugin({ 
+                        sampleRate: 1.0  // Record 100% of sessions
+                    }));
+                } else {
+                    console.warn('Session replay plugin not found');
+                }
+                
                 // Add engagement plugin
                 if (window.engagement && window.engagement.plugin) {
                     console.log('Adding engagement plugin...');
                     window.amplitude.add(window.engagement.plugin());
                 } else {
                     console.warn('Engagement plugin not found');
-                }
-                
-                // Add session replay plugin
-                if (window.sessionReplay && window.sessionReplay.plugin) {
-                    console.log('Adding session replay plugin...');
-                    window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
-                } else {
-                    console.warn('Session replay plugin not found');
                 }
                 
                 // Initialize Amplitude
