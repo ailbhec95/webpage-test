@@ -27,14 +27,11 @@
                   //  console.warn('Engagement plugin not found');
                 //}
                 
-
+                window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
                 // Initialize Amplitude
                 window.amplitude.init('a3f7a8d1c910f8fabc60dd7e947438f1', { 
                     "fetchRemoteConfig": true, 
-                    "autocapture": true,
-                    "sessionReplay": {
-                        "sampleRate": 1.0  // Record 100% of sessions
-                    }
+                    "autocapture": true
                 });
                 
                 console.log('Amplitude initialized successfully');
