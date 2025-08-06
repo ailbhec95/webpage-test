@@ -36,6 +36,15 @@
                 
                 console.log('Amplitude initialized successfully');
                 
+                // Debug session replay status
+                setTimeout(() => {
+                    if (window.amplitude && window.amplitude.getInstance) {
+                        const instance = window.amplitude.getInstance();
+                        console.log('Amplitude instance:', instance);
+                        console.log('Session replay status:', instance.sessionReplay || 'Session replay not found');
+                    }
+                }, 1000);
+                
             } catch (error) {
                 console.error('Error initializing Amplitude:', error);
             }
