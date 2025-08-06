@@ -12,17 +12,16 @@
      <!--script src="https://cdn.amplitude.com/script/a3f7a8d1c910f8fabc60dd7e947438f1.engagement.js"></script>-->
     <script>
 
-        
-                // Add engagement plugin only (session replay should be included)
-               // if (window.engagement && window.engagement.plugin) {
-                   // console.log('Adding engagement plugin...');
-                    //const engagementPlugin = window.engagement.plugin();
-                    //console.log('Engagement plugin object:', engagementPlugin);
-                    //window.amplitude.add(engagementPlugin);
-                    //console.log('Engagement plugin added');
-                //} else {
-                  //  console.warn('Engagement plugin not found');
-                //}
+            // Add engagement plugin only (session replay should be included)
+               if (window.engagement && window.engagement.plugin) {
+                   console.log('Adding engagement plugin...');
+                    const engagementPlugin = window.engagement.plugin();
+                    console.log('Engagement plugin object:', engagementPlugin);
+                    window.amplitude.add(engagementPlugin);
+                    console.log('Engagement plugin added');
+                } else {
+                  console.warn('Engagement plugin not found');
+                }
                 
             window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
                 // Initialize Amplitude
