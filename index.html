@@ -16,11 +16,11 @@
             try {
                 console.log('Initializing Amplitude...');
                 
-                // Add engagement plugin (session replay is included automatically)
+                // Add engagement plugin
                 if (window.engagement && window.engagement.plugin) {
                     console.log('Adding engagement plugin...');
                     window.amplitude.add(window.engagement.plugin());
-                    console.log('Engagement plugin added (session replay included)');
+                    console.log('Engagement plugin added');
                 } else {
                     console.warn('Engagement plugin not found');
                 }
@@ -38,10 +38,14 @@
                 
                 // Debug session replay status
                 setTimeout(() => {
-                    if (window.amplitude && window.amplitude.getInstance) {
-                        const instance = window.amplitude.getInstance();
-                        console.log('Amplitude instance:', instance);
-                        console.log('Session replay status:', instance.sessionReplay || 'Session replay not found');
+                    console.log('=== SESSION REPLAY DEBUG ===');
+                    console.log('window.amplitude exists:', !!window.amplitude);
+                    console.log('window.sessionReplay exists:', !!window.sessionReplay);
+                    console.log('amplitude methods:', Object.keys(window.amplitude || {}));
+                    
+                    // Check if session replay is working by looking for specific indicators
+                    if (window.amplitude) {
+                        console.log('Amplitude plugins:', window.amplitude._plugins || 'No _plugins found');
                     }
                 }, 1000);
                 
