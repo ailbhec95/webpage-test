@@ -8,59 +8,47 @@
     <link rel="stylesheet" href="style.css">
     
     <!-- Amplitude Analytics with Engagement Plugin -->
+    <script src="https://cdn.amplitude.com/script/a3f7a8d1c910f8fabc60dd7e947438f1.js"></script>
     <script src="https://cdn.amplitude.com/script/a3f7a8d1c910f8fabc60dd7e947438f1.engagement.js"></script>
     <script>
-        // Wait for both Amplitude and plugins to be ready before initializing
+        // Initialize Amplitude with plugins
         function initializeAmplitude() {
             try {
-                console.log('Checking if Amplitude is ready...');
+                console.log('Initializing Amplitude...');
                 
-                // First, ensure Amplitude is loaded
-                if (!window.amplitude || !window.amplitude.init) {
-                    console.log('Amplitude not ready yet, retrying...');
-                    setTimeout(initializeAmplitude, 200);
-                    return;
-                }
-                
-                console.log('Amplitude is ready, adding plugins...');
-                
-                // Check if engagement plugin is available
+                // Add engagement plugin
                 if (window.engagement && window.engagement.plugin) {
-                    console.log('Engagement plugin found, adding to Amplitude...');
+                    console.log('Adding engagement plugin...');
                     window.amplitude.add(window.engagement.plugin());
                 } else {
                     console.warn('Engagement plugin not found');
                 }
                 
-                // Check if session replay is available
+                // Add session replay plugin
                 if (window.sessionReplay && window.sessionReplay.plugin) {
-                    console.log('Session replay plugin found, adding to Amplitude...');
+                    console.log('Adding session replay plugin...');
                     window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
                 } else {
                     console.warn('Session replay plugin not found');
                 }
                 
-                // Initialize Amplitude AFTER adding plugins
+                // Initialize Amplitude
                 window.amplitude.init('a3f7a8d1c910f8fabc60dd7e947438f1', { 
                     "fetchRemoteConfig": true, 
                     "autocapture": true 
                 });
                 
-                console.log('Amplitude initialized successfully with plugins');
+                console.log('Amplitude initialized successfully');
                 
             } catch (error) {
                 console.error('Error initializing Amplitude:', error);
             }
         }
         
-        // Start initialization process
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', function() {
-                setTimeout(initializeAmplitude, 100);
-            });
-        } else {
+        // Wait for scripts to load
+        window.addEventListener('load', function() {
             setTimeout(initializeAmplitude, 100);
-        }
+        });
     </script>
 
 </head>
