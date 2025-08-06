@@ -11,11 +11,8 @@
     <script src="https://cdn.amplitude.com/script/a3f7a8d1c910f8fabc60dd7e947438f1.js"></script>
      <!--script src="https://cdn.amplitude.com/script/a3f7a8d1c910f8fabc60dd7e947438f1.engagement.js"></script>-->
     <script>
-        // Initialize Amplitude with plugins
-        function initializeAmplitude() {
-            try {
-                console.log('Initializing Amplitude...');
-                
+
+        
                 // Add engagement plugin only (session replay should be included)
                // if (window.engagement && window.engagement.plugin) {
                    // console.log('Adding engagement plugin...');
@@ -27,37 +24,15 @@
                   //  console.warn('Engagement plugin not found');
                 //}
                 
-                window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
+            window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
                 // Initialize Amplitude
-                window.amplitude.init('a3f7a8d1c910f8fabc60dd7e947438f1', { 
-                    "fetchRemoteConfig": true, 
-                    "autocapture": true
+            window.amplitude.init('a3f7a8d1c910f8fabc60dd7e947438f1', { 
+                "fetchRemoteConfig": true, 
+                "autocapture": true
                 });
                 
-                console.log('Amplitude initialized successfully');
-                
-                // Debug session replay status
-                setTimeout(() => {
-                    console.log('=== SESSION REPLAY DEBUG ===');
-                    console.log('window.amplitude exists:', !!window.amplitude);
-                    console.log('window.sessionReplay exists:', !!window.sessionReplay);
-                    console.log('amplitude methods:', Object.keys(window.amplitude || {}));
-                    
-                    // Check if session replay is working by looking for specific indicators
-                    if (window.amplitude) {
-                        console.log('Amplitude plugins:', window.amplitude._plugins || 'No _plugins found');
-                    }
-                }, 1000);
-                
-            } catch (error) {
-                console.error('Error initializing Amplitude:', error);
-            }
-        }
-        
-        // Wait for scripts to load
-        window.addEventListener('load', function() {
-            setTimeout(initializeAmplitude, 100);
-        });
+            console.log('Amplitude initialized successfully');
+
     </script>
 
 </head>
