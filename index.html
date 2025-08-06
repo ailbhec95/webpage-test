@@ -16,20 +16,11 @@
             try {
                 console.log('Initializing Amplitude...');
                 
-                // Add session replay plugin first
-                if (window.sessionReplay && window.sessionReplay.plugin) {
-                    console.log('Adding session replay plugin...');
-                    window.amplitude.add(window.sessionReplay.plugin({ 
-                        sampleRate: 1.0  // Record 100% of sessions
-                    }));
-                } else {
-                    console.warn('Session replay plugin not found');
-                }
-                
-                // Add engagement plugin
+                // Add engagement plugin (session replay is included automatically)
                 if (window.engagement && window.engagement.plugin) {
                     console.log('Adding engagement plugin...');
                     window.amplitude.add(window.engagement.plugin());
+                    console.log('Engagement plugin added (session replay included)');
                 } else {
                     console.warn('Engagement plugin not found');
                 }
@@ -37,7 +28,10 @@
                 // Initialize Amplitude
                 window.amplitude.init('a3f7a8d1c910f8fabc60dd7e947438f1', { 
                     "fetchRemoteConfig": true, 
-                    "autocapture": true 
+                    "autocapture": true,
+                    "sessionReplay": {
+                        "sampleRate": 1.0  // Record 100% of sessions
+                    }
                 });
                 
                 console.log('Amplitude initialized successfully');
