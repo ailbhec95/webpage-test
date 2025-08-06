@@ -2,15 +2,22 @@
 <html lang="en">
 
 <head>
-    <script type="text/javascript" src="https://cdn.amplitude.com/script/a3f7a8d1c910f8fabc60dd7e947438f1.experiment.js"></script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PropertySale - Find Your Dream Home</title>
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Amplitude Analytics with Engagement Plugin -->
     <script src="https://cdn.amplitude.com/script/a3f7a8d1c910f8fabc60dd7e947438f1.engagement.js"></script>
-    <script>window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 })); window.amplitude.init('a3f7a8d1c910f8fabc60dd7e947438f1', { "fetchRemoteConfig": true, "autocapture": true });</script>
-    <script>amplitude.add(window.engagement.plugin())</script>
+    <script>
+        // Initialize Amplitude with engagement plugin
+        window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
+        window.amplitude.add(window.engagement.plugin());
+        window.amplitude.init('a3f7a8d1c910f8fabc60dd7e947438f1', { 
+            "fetchRemoteConfig": true, 
+            "autocapture": true 
+        });
+    </script>
 
 </head>
 
@@ -266,6 +273,14 @@
         <button class="btn-secondary" onclick="logout()">Logout</button>
     </div>
 
-    <script src="script.js?v=3&t=1704649200"></script>
+    <!-- Engagement Testing Panel (for debugging guides and surveys) -->
+    <div style="position: fixed; bottom: 20px; right: 20px; background: #fff; border: 2px solid #3498db; border-radius: 8px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;">
+        <h4 style="margin: 0 0 10px 0; color: #3498db;">Engagement Test Panel</h4>
+        <button onclick="showTestGuide()" style="display: block; width: 100%; margin: 5px 0; padding: 8px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">Test Guide</button>
+        <button onclick="showTestSurvey()" style="display: block; width: 100%; margin: 5px 0; padding: 8px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer;">Test Survey</button>
+        <small style="color: #7f8c8d; font-size: 11px;">Check browser console for logs</small>
+    </div>
+
+    <script src="script.js?v=4&t=1704649300"></script>
 </body>
 </html> 
