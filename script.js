@@ -118,32 +118,39 @@ function login(name, userId, password, estateAgentId) {
         // Set the user ID
         amplitude.setUserId(userId.trim());
         
-        // Set user to estate agent group for account-level reporting
-        amplitude.setGroup('estateAgent', estateAgentId);
-        
-        // Set group properties for the estate agent
-        const groupObj = new amplitude.Identify();
-        groupObj.set('name', estateAgents[estateAgentId] || estateAgentId);
-        groupObj.set('agentId', estateAgentId);
-        groupObj.set('industry', 'Real Estate');
-        amplitude.groupIdentify('estateAgent', estateAgentId, groupObj);
-        
-        // Create identify object with user properties
+        // Set user properties
         const userObj = new amplitude.Identify();
         userObj.set('userName', name.trim());
         userObj.set('loginMethod', 'form');
-        
-        // Send identify call to set user properties
         amplitude.identify(userObj);
+        
+        // Set user to company group for account-level reporting (using "company" as group type)
+        amplitude.setGroup('company', estateAgentId);
+        
+        // Set group properties for the estate agent company
+        const groupObj = new amplitude.Identify();
+        groupObj.set('name', estateAgents[estateAgentId] || estateAgentId);
+        groupObj.set('companyId', estateAgentId);
+        groupObj.set('industry', 'Real Estate');
+        groupObj.set('type', 'Estate Agent');
+        amplitude.groupIdentify('company', estateAgentId, groupObj);
         
         // Send login event
         amplitude.track('User Logged In', {
             loginMethod: 'form'
         });
         
-        console.log('Amplitude identify call sent for user login:', userId.trim());
-        console.log('Estate Agent Group:', estateAgents[estateAgentId]);
-        console.log('Group ID:', estateAgentId);
+        console.log('=== AMPLITUDE DEBUG ===');
+        console.log('User ID set:', userId.trim());
+        console.log('User properties set:', { userName: name.trim(), loginMethod: 'form' });
+        console.log('Group assignment - Type: company, ID:', estateAgentId);
+        console.log('Group properties set:', { 
+            name: estateAgents[estateAgentId], 
+            companyId: estateAgentId, 
+            industry: 'Real Estate',
+            type: 'Estate Agent' 
+        });
+        console.log('=== END AMPLITUDE DEBUG ===');
     }
     
     console.log('User logged in:', userSession);
