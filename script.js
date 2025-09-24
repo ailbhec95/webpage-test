@@ -90,13 +90,23 @@ function clearLoginError() {
     errorDiv.classList.remove('show');
 }
 
-function login(name, userId, password) {
+// Estate Agent Data for Account-Level Reporting
+const estateAgents = {
+    'premium-properties': 'Premium Properties Inc.',
+    'downtown-realty': 'Downtown Realty Group', 
+    'riverside-homes': 'Riverside Homes Co.',
+    'luxury-estates': 'Luxury Estates Ltd.'
+};
+
+function login(name, userId, password, estateAgentId) {
     
-    // Store user session temporarily
+    // Store user session with estate agent information
     const userSession = {
         name: name.trim(),
         userId: userId.trim(),
         password: password, // In real app, never store passwords!
+        estateAgentId: estateAgentId,
+        estateAgentName: estateAgents[estateAgentId] || estateAgentId,
         loginTime: new Date().toISOString(),
         sessionId: 'session_' + Date.now()
     };
@@ -112,14 +122,18 @@ function login(name, userId, password) {
         const userObj = new amplitude.Identify();
         userObj.set('userName', name.trim());
         userObj.set('loginMethod', 'form');
+        userObj.set('estateAgent', estateAgents[estateAgentId] || estateAgentId);
+        userObj.set('estateAgentId', estateAgentId);
         
         // Send identify call
         amplitude.track('User Logged In', userObj);
         
         console.log('Amplitude identify call sent for user login:', userId.trim());
+        console.log('Estate Agent Account:', estateAgents[estateAgentId]);
     }
     
     console.log('User logged in:', userSession);
+    updateUserDisplay();
     return true;
 }
 
@@ -129,8 +143,32 @@ function logout() {
     // Clear session
     localStorage.removeItem('userSession');
     
+    // Hide user display
+    const userStatus = document.getElementById('userStatus');
+    if (userStatus) {
+        userStatus.classList.add('hidden');
+    }
+    
     console.log('User logged out');
     alert('You have been logged out successfully!');
+}
+
+function getCurrentUser() {
+    const sessionData = localStorage.getItem('userSession');
+    return sessionData ? JSON.parse(sessionData) : null;
+}
+
+function updateUserDisplay() {
+    const user = getCurrentUser();
+    const userStatus = document.getElementById('userStatus');
+    const userWelcome = document.getElementById('userWelcome');
+    const estateAgentDisplay = document.getElementById('estateAgentDisplay');
+    
+    if (user && userStatus && userWelcome && estateAgentDisplay) {
+        estateAgentDisplay.textContent = `Account: ${user.estateAgentName}`;
+        userWelcome.textContent = `Welcome, ${user.name}`;
+        userStatus.classList.remove('hidden');
+    }
 }
 
 function getUserInfo() {
@@ -356,20 +394,29 @@ function scheduleViewing(propertyTitle, propertyId) {
 
 // DOM Content Loaded Event Listeners
 document.addEventListener('DOMContentLoaded', function() {
+    // Check for existing user session and display if found
+    updateUserDisplay();
+    
     // Handle login form
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
+            const estateAgentId = document.getElementById('estateAgent').value;
             const name = document.getElementById('loginName').value;
             const userId = document.getElementById('loginUserId').value;
             const password = document.getElementById('loginPassword').value;
             
-            if (login(name, userId, password)) {
+            if (!estateAgentId) {
+                showLoginError('Please select an estate agent.');
+                return;
+            }
+            
+            if (login(name, userId, password, estateAgentId)) {
                 closeLoginModal();
                 this.reset();
-                alert(`Welcome, ${name}! You are now logged in.`);
+                alert(`Welcome, ${name}! You are now logged in to ${estateAgents[estateAgentId]}.`);
             }
         });
     }

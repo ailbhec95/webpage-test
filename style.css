@@ -388,7 +388,8 @@ footer {
     font-weight: bold;
 }
 
-.login-form input {
+.login-form input,
+.login-form select {
     width: 100%;
     padding: 10px;
     border: 2px solid #ddd;
@@ -435,10 +436,27 @@ footer {
     align-items: center;
     gap: 1rem;
     z-index: 999;
+    min-width: 280px;
 }
 
 .user-status.hidden {
     display: none;
+}
+
+.account-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.estate-agent-info {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: bold;
+    padding: 0.25rem 0.5rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border-left: 3px solid #3498db;
 }
 
 .user-status span {

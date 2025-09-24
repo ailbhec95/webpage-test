@@ -262,6 +262,16 @@
                 <h2>Login</h2>
                 <form class="login-form" id="loginForm">
                     <div class="form-group">
+                        <label for="estateAgent">Estate Agent:</label>
+                        <select id="estateAgent" name="estateAgent" required>
+                            <option value="">Select Estate Agent</option>
+                            <option value="premium-properties">Premium Properties Inc.</option>
+                            <option value="downtown-realty">Downtown Realty Group</option>
+                            <option value="riverside-homes">Riverside Homes Co.</option>
+                            <option value="luxury-estates">Luxury Estates Ltd.</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="loginName">Name:</label>
                         <input type="text" id="loginName" name="name" required>
                     </div>
@@ -285,7 +295,10 @@
 
     <!-- User Status Display -->
     <div id="userStatus" class="user-status hidden">
-        <span id="userWelcome"></span>
+        <div class="account-info">
+            <div id="estateAgentDisplay" class="estate-agent-info"></div>
+            <span id="userWelcome"></span>
+        </div>
         <button class="btn-secondary" onclick="logout()">Logout</button>
     </div>
 
