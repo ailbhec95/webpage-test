@@ -6,31 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PropertySale - Find Your Dream Home</title>
     <link rel="stylesheet" href="style.css">
-    
+
     <!-- Amplitude Analytics with Engagement Plugin -->
     <script src="https://cdn.amplitude.com/script/a3f7a8d1c910f8fabc60dd7e947438f1.js"></script>
-     <!--script src="https://cdn.amplitude.com/script/a3f7a8d1c910f8fabc60dd7e947438f1.engagement.js"></script>-->
+    <script src="https://cdn.amplitude.com/script/a3f7a8d1c910f8fabc60dd7e947438f1.engagement.js"></script>
     <script>
 
-            // Add engagement plugin only (session replay should be included)
-               if (window.engagement && window.engagement.plugin) {
-                   console.log('Adding engagement plugin...');
-                    const engagementPlugin = window.engagement.plugin();
-                    console.log('Engagement plugin object:', engagementPlugin);
-                    window.amplitude.add(engagementPlugin);
-                    console.log('Engagement plugin added');
-                } else {
-                  console.warn('Engagement plugin not found');
-                }
-                
-            window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
-                // Initialize Amplitude
-            window.amplitude.init('a3f7a8d1c910f8fabc60dd7e947438f1', { 
-                "fetchRemoteConfig": true, 
-                "autocapture": true
-                });
-                
-            console.log('Amplitude initialized successfully');
+        // Add engagement plugin only (session replay should be included)
+        if (window.engagement && window.engagement.plugin) {
+            console.log('Adding engagement plugin...');
+            const engagementPlugin = window.engagement.plugin();
+            console.log('Engagement plugin object:', engagementPlugin);
+            window.amplitude.add(engagementPlugin);
+            console.log('Engagement plugin added');
+        } else {
+            console.warn('Engagement plugin not found');
+        }
+        const sessionReplayTracking = window.sessionReplay.plugin();
+
+        window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
+        // Initialize Amplitude
+        window.amplitude.init('a3f7a8d1c910f8fabc60dd7e947438f1', {
+            "fetchRemoteConfig": true,
+            "autocapture": true
+        });
+
+        console.log('Amplitude initialized successfully');
 
     </script>
 
@@ -290,4 +291,5 @@
 
     <script src="script.js?v=4&t=1704649300"></script>
 </body>
-</html> 
+
+</html>
