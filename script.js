@@ -125,8 +125,15 @@ function login(name, userId, password, estateAgentId) {
         userObj.set('estateAgent', estateAgents[estateAgentId] || estateAgentId);
         userObj.set('estateAgentId', estateAgentId);
         
-        // Send identify call
-        amplitude.track('User Logged In', userObj);
+        // Send identify call to set user properties
+        amplitude.identify(userObj);
+        
+        // Send login event
+        amplitude.track('User Logged In', {
+            estateAgent: estateAgents[estateAgentId] || estateAgentId,
+            estateAgentId: estateAgentId,
+            loginMethod: 'form'
+        });
         
         console.log('Amplitude identify call sent for user login:', userId.trim());
         console.log('Estate Agent Account:', estateAgents[estateAgentId]);
