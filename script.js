@@ -118,25 +118,32 @@ function login(name, userId, password, estateAgentId) {
         // Set the user ID
         amplitude.setUserId(userId.trim());
         
+        // Set user to estate agent group for account-level reporting
+        amplitude.setGroup('estateAgent', estateAgentId);
+        
+        // Set group properties for the estate agent
+        const groupObj = new amplitude.Identify();
+        groupObj.set('name', estateAgents[estateAgentId] || estateAgentId);
+        groupObj.set('agentId', estateAgentId);
+        groupObj.set('industry', 'Real Estate');
+        amplitude.groupIdentify('estateAgent', estateAgentId, groupObj);
+        
         // Create identify object with user properties
         const userObj = new amplitude.Identify();
         userObj.set('userName', name.trim());
         userObj.set('loginMethod', 'form');
-        userObj.set('estateAgent', estateAgents[estateAgentId] || estateAgentId);
-        userObj.set('estateAgentId', estateAgentId);
         
         // Send identify call to set user properties
         amplitude.identify(userObj);
         
         // Send login event
         amplitude.track('User Logged In', {
-            estateAgent: estateAgents[estateAgentId] || estateAgentId,
-            estateAgentId: estateAgentId,
             loginMethod: 'form'
         });
         
         console.log('Amplitude identify call sent for user login:', userId.trim());
-        console.log('Estate Agent Account:', estateAgents[estateAgentId]);
+        console.log('Estate Agent Group:', estateAgents[estateAgentId]);
+        console.log('Group ID:', estateAgentId);
     }
     
     console.log('User logged in:', userSession);
