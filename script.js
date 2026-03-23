@@ -101,6 +101,7 @@ const estateAgents = {
 /** Plan type for Amplitude user property `plan_type` (persisted in localStorage). */
 const PLAN_FREE = 'free';
 const PLAN_FREE_TRIAL = 'free trial';
+const PLAN_PREMIUM = 'premium';
 
 function getPlanType() {
     return localStorage.getItem('planType') || PLAN_FREE;
@@ -205,19 +206,32 @@ function updateUserDisplay() {
     const estateAgentDisplay = document.getElementById('estateAgentDisplay');
     const planLabel = document.getElementById('planLabel');
     const subscribeBtn = document.getElementById('subscribeBtn');
+    const upgradePremiumBtn = document.getElementById('upgradePremiumBtn');
     const subscribeNavItem = document.getElementById('subscribeNavItem');
+    const premiumNavItem = document.getElementById('premiumNavItem');
 
     const plan = getPlanType();
-    const onTrial = plan === PLAN_FREE_TRIAL;
 
     if (planLabel) {
-        planLabel.textContent = onTrial ? `Plan: ${PLAN_FREE_TRIAL}` : `Plan: ${PLAN_FREE}`;
+        if (plan === PLAN_PREMIUM) {
+            planLabel.textContent = 'Plan: Premium';
+        } else if (plan === PLAN_FREE_TRIAL) {
+            planLabel.textContent = `Plan: ${PLAN_FREE_TRIAL}`;
+        } else {
+            planLabel.textContent = `Plan: ${PLAN_FREE}`;
+        }
     }
     if (subscribeBtn) {
-        subscribeBtn.style.display = onTrial ? 'none' : 'inline-block';
+        subscribeBtn.style.display = plan === PLAN_FREE ? 'inline-block' : 'none';
+    }
+    if (upgradePremiumBtn) {
+        upgradePremiumBtn.style.display = plan === PLAN_FREE_TRIAL ? 'inline-block' : 'none';
     }
     if (subscribeNavItem) {
-        subscribeNavItem.style.display = onTrial ? 'none' : 'list-item';
+        subscribeNavItem.style.display = plan === PLAN_FREE ? 'list-item' : 'none';
+    }
+    if (premiumNavItem) {
+        premiumNavItem.style.display = plan === PLAN_FREE_TRIAL ? 'list-item' : 'none';
     }
 
     if (user && userStatus && userWelcome && estateAgentDisplay) {
@@ -232,6 +246,10 @@ function updateUserDisplay() {
  * The new plan_type applies to this event and all subsequent events until changed again.
  */
 function startFreeTrial() {
+    if (getPlanType() === PLAN_PREMIUM) {
+        alert('You already have Premium.');
+        return;
+    }
     if (getPlanType() === PLAN_FREE_TRIAL) {
         alert('You are already on a free trial.');
         return;
@@ -249,6 +267,34 @@ function startFreeTrial() {
     setPlanType(PLAN_FREE_TRIAL);
     updateUserDisplay();
     alert('You are now on a free trial. Enjoy full access!');
+}
+
+/**
+ * Upgrade from free trial to premium: Identify first, then log the event.
+ */
+function upgradeToPremium() {
+    if (getPlanType() === PLAN_PREMIUM) {
+        alert('You already have Premium.');
+        return;
+    }
+    if (getPlanType() !== PLAN_FREE_TRIAL) {
+        alert('Upgrade to Premium is available during your free trial.');
+        return;
+    }
+
+    if (typeof amplitude !== 'undefined') {
+        const identify = new amplitude.Identify().set('plan_type', PLAN_PREMIUM);
+        amplitude.identify(identify);
+
+        amplitude.track('Premium Upgraded', {
+            source: 'pricing_page',
+            previous_plan: PLAN_FREE_TRIAL,
+        });
+    }
+
+    setPlanType(PLAN_PREMIUM);
+    updateUserDisplay();
+    alert('Welcome to Premium! You now have full access.');
 }
 
 function getUserInfo() {

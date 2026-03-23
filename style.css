@@ -464,6 +464,17 @@ footer {
     background: #219a52;
 }
 
+.btn-premium {
+    background: #8e44ad;
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.btn-premium:hover {
+    background: #732d91;
+}
+
 .user-status.hidden {
     display: none;
 }
