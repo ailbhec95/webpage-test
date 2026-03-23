@@ -98,6 +98,23 @@ const estateAgents = {
     'luxury-estates': 'Luxury Estates Ltd.'
 };
 
+/** Plan type for Amplitude user property `plan_type` (persisted in localStorage). */
+const PLAN_FREE = 'free';
+const PLAN_FREE_TRIAL = 'free trial';
+
+function getPlanType() {
+    return localStorage.getItem('planType') || PLAN_FREE;
+}
+
+function setPlanType(value) {
+    localStorage.setItem('planType', value);
+    const user = getCurrentUser();
+    if (user) {
+        user.planType = value;
+        localStorage.setItem('userSession', JSON.stringify(user));
+    }
+}
+
 function login(name, userId, password, estateAgentId) {
     
     // Store user session with estate agent information
@@ -108,7 +125,8 @@ function login(name, userId, password, estateAgentId) {
         estateAgentId: estateAgentId,
         estateAgentName: estateAgents[estateAgentId] || estateAgentId,
         loginTime: new Date().toISOString(),
-        sessionId: 'session_' + Date.now()
+        sessionId: 'session_' + Date.now(),
+        planType: getPlanType()
     };
     
     localStorage.setItem('userSession', JSON.stringify(userSession));
@@ -118,10 +136,11 @@ function login(name, userId, password, estateAgentId) {
         // Set the user ID
         amplitude.setUserId(userId.trim());
         
-        // Set user properties
+        // Set user properties (plan_type: identify before any events so charts reflect the right segment)
         const userObj = new amplitude.Identify();
         userObj.set('userName', name.trim());
         userObj.set('loginMethod', 'form');
+        userObj.set('plan_type', getPlanType());
         amplitude.identify(userObj);
         
         // Set user to company group for account-level reporting (using "company" as group type)
@@ -184,12 +203,52 @@ function updateUserDisplay() {
     const userStatus = document.getElementById('userStatus');
     const userWelcome = document.getElementById('userWelcome');
     const estateAgentDisplay = document.getElementById('estateAgentDisplay');
-    
+    const planLabel = document.getElementById('planLabel');
+    const subscribeBtn = document.getElementById('subscribeBtn');
+    const subscribeNavItem = document.getElementById('subscribeNavItem');
+
+    const plan = getPlanType();
+    const onTrial = plan === PLAN_FREE_TRIAL;
+
+    if (planLabel) {
+        planLabel.textContent = onTrial ? `Plan: ${PLAN_FREE_TRIAL}` : `Plan: ${PLAN_FREE}`;
+    }
+    if (subscribeBtn) {
+        subscribeBtn.style.display = onTrial ? 'none' : 'inline-block';
+    }
+    if (subscribeNavItem) {
+        subscribeNavItem.style.display = onTrial ? 'none' : 'list-item';
+    }
+
     if (user && userStatus && userWelcome && estateAgentDisplay) {
         estateAgentDisplay.textContent = `Account: ${user.estateAgentName}`;
         userWelcome.textContent = `Welcome, ${user.name}`;
         userStatus.classList.remove('hidden');
     }
+}
+
+/**
+ * Upgrade plan to free trial: Identify first (recommended), then log the event.
+ * The new plan_type applies to this event and all subsequent events until changed again.
+ */
+function startFreeTrial() {
+    if (getPlanType() === PLAN_FREE_TRIAL) {
+        alert('You are already on a free trial.');
+        return;
+    }
+
+    if (typeof amplitude !== 'undefined') {
+        const identify = new amplitude.Identify().set('plan_type', PLAN_FREE_TRIAL);
+        amplitude.identify(identify);
+
+        amplitude.track('Subscription Upgraded', {
+            source: 'pricing_page',
+        });
+    }
+
+    setPlanType(PLAN_FREE_TRIAL);
+    updateUserDisplay();
+    alert('You are now on a free trial. Enjoy full access!');
 }
 
 function getUserInfo() {

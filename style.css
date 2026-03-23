@@ -435,8 +435,33 @@ footer {
     display: flex;
     align-items: center;
     gap: 1rem;
+    flex-wrap: wrap;
     z-index: 999;
     min-width: 280px;
+}
+
+.user-status-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+}
+
+.plan-label {
+    font-size: 0.85rem;
+    color: #555;
+    font-weight: normal;
+}
+
+.btn-subscribe {
+    background: #27ae60;
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.btn-subscribe:hover {
+    background: #219a52;
 }
 
 .user-status.hidden {

@@ -47,6 +47,7 @@
                 <li><a href="#properties">Properties</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
+                <li id="subscribeNavItem"><a href="#" onclick="startFreeTrial(); return false;">Subscribe</a></li>
                 <li id="loginNavItem"><a href="#" onclick="openLoginModal()">Login</a></li>
             </ul>
         </nav>
@@ -297,12 +298,16 @@
     <div id="userStatus" class="user-status hidden">
         <div class="account-info">
             <div id="estateAgentDisplay" class="estate-agent-info"></div>
+            <span id="planLabel" class="plan-label"></span>
             <span id="userWelcome"></span>
         </div>
-        <button class="btn-secondary" onclick="logout()">Logout</button>
+        <div class="user-status-actions">
+            <button type="button" id="subscribeBtn" class="btn btn-subscribe" onclick="startFreeTrial()">Start free trial</button>
+            <button class="btn-secondary" onclick="logout()">Logout</button>
+        </div>
     </div>
 
-    <script src="script.js?v=4&t=1704649300"></script>
+    <script src="script.js?v=5&t=1704649300"></script>
 </body>
 
 </html>
