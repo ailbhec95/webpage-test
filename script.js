@@ -241,7 +241,7 @@ function startFreeTrial() {
         const identify = new amplitude.Identify().set('plan_type', PLAN_FREE_TRIAL);
         amplitude.identify(identify);
 
-        amplitude.track('Subscription Upgraded', {
+        amplitude.track('Free Trial Started', {
             source: 'pricing_page',
         });
     }
